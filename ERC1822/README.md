@@ -36,4 +36,18 @@ you will see the additional proxy options.
 >include the opcode optimisation which will cause an error to older chains. If this
 >issue exist, simply downgrade the compiler version.
 
-NFTExample
+NFTExample contract:
+```
+// This contract mimicks a NFT contract, deploy this contract first and only take
+// note of its proxy address (the implementation contract is not important once deployed).
+// We can set the totalSupply to be 10 during deployment, so after it is all minted,
+// the contract lose its value. This is where we upgrade it.
+```
+
+NFTExampleV2 contract:
+```
+// As the "name" is stored in the proxy contract, it could be changed. Any default
+// variables stored in the implementation contract will not be called. This new version
+// has an addSupply() function that add 16 new supply everytime it is being called.
+// There is no limit to how many versions as it can be upgraded.
+```

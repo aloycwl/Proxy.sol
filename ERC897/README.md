@@ -15,7 +15,7 @@ as it will not even reach that the other contract.
 Usage:
 ```
 // Create a new contract first, let's use a ERC-20 token contract as example
-ERC20 e20 = new ERC20("Proxy Coin", "PXC");
+ERC20 e20 = new ERC20("Proxy Token", "PXT");
 Proxy pxy = new Proxy(address(e20));
 // As the constructor for Proxy requires an address input,
 // the newly created contract will need to be converted
@@ -47,4 +47,45 @@ switch res
     case 0 { revert(0x00, sze) }
     default { return(0x00, sze) }
 
+// Even through they did the same thing and can be re-called using a private 
+// function, it will cost a little extra gas to therefore all based codes
+// are duplicated between the 2 functions.
 ```
+
+implementation() usage:
+```
+// To know what is the implementation, simply:
+address adr = 0x000...000; // Proxy address
+address imp = ERC897(adr).implementation();
+
+// To set a new implementation address
+address newContract = address(new ERC20("Another Token", "ANT"));
+ERC897(adr).mem(IN2, newContract);
+```
+
+mem(bytes32) and mem(bytes32, bytes32) usage:
+```
+// These are not the default functions in a typical ERC897 contract but they
+// are the most useful function as it can access all the storage pointers.
+// All storage are determined by bytes32 so meaning each contract would have 
+// almost unlimited storage (16^64 positions).
+
+// To store a value
+address tmp = msg.sender;
+bytes32 ptr = keccak256(abi.encodePacked(tmp));
+bytes32 val = bytes32(uint(0x1234));
+ERC897(adr).mem(ptr, val);
+// This map the caller's address into a bytes32 position and the information
+// pertaining to this user is stored in the memory Solidity
+
+// To retrieve a value
+address tmp = msg.sender;
+bytes32 ptr = keccak256(abi.encodePacked(tmp));
+bytes32 val = ERC897(adr).mem(ptr);
+// Using the same mapping manner the val can be recovered, to ensure no similar
+// mapping, you can add salt in the keccak to better segregate it.
+```
+
+By using the mem functions, every storage in your contract and be manipulate
+or accessed. Even for arrays and string values, the first position is usually
+the data size and the rest of the data are +1 point to the initial bytes32.

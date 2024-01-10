@@ -4,16 +4,12 @@ pragma solidity 0.8.0;
 import {Ownable} from "https://github.com/aloycwl/Util.sol/blob/main/Access/Ownable.sol";
 
 contract Proxy is Ownable {
-    
-    address private imp;
 
     constructor(address adr) {
-        assembly {
-            sstore(IN2, adr) // implementation = adr;
-        }
+        assembly { sstore(IN2, adr) }
     }
 
-    fallback() external payable {
+    fallback() external {
         assembly {
             calldatacopy(0x00, 0x00, calldatasize())
             let res := delegatecall(gas(), sload(IN2), 0x00, calldatasize(), 0x00, 0x00)
@@ -48,4 +44,5 @@ contract Proxy is Ownable {
     function mem(bytes32 byt, bytes32 val) external onlyOwner {
         assembly { sstore(byt, val) }
     }
+
 }

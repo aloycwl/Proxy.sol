@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: None
 pragma solidity 0.8.0;
 
-import {UUPSUpgradeable} from "./UUPS.sol"; 
+import {UUPSUpgradeable} from "https://github.com/aloycwl/Proxy.sol/blob/main/ERC1822/UUPS.sol"; 
 
 contract NFTExample is UUPSUpgradeable {
 

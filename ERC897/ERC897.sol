@@ -3,7 +3,7 @@ pragma solidity 0.8.0;
 
 import {Ownable} from "https://github.com/aloycwl/Util.sol/blob/main/Access/Ownable.sol";
 
-contract Proxy is Ownable {
+contract ERC897 is Ownable {
 
     constructor(address adr) {
         assembly { sstore(IN2, adr) }

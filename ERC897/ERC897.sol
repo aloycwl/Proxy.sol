@@ -9,7 +9,7 @@ contract ERC897 is Ownable {
         assembly { sstore(IN2, adr) }
     }
 
-    fallback() external {
+    fallback () external payable {
         assembly {
             calldatacopy(0x00, 0x00, calldatasize())
             let res := delegatecall(gas(), sload(IN2), 0x00, calldatasize(), 0x00, 0x00)
@@ -21,7 +21,7 @@ contract ERC897 is Ownable {
         }
     }
 
-    receive() external payable {
+    receive () external payable {
         assembly {
             calldatacopy(0x00, 0x00, calldatasize())
             let res := delegatecall(gas(), sload(IN2), 0x00, calldatasize(), 0x00, 0x00)
@@ -33,15 +33,15 @@ contract ERC897 is Ownable {
         }
     }
 
-    function implementation() external view returns(address adr) {
+    function implementation () external view returns(address adr) {
         assembly { adr := sload(IN2) }
     }
 
-    function mem(bytes32 byt) external view returns(bytes32 val) {
+    function mem (bytes32 byt) external view returns(bytes32 val) {
         assembly { val := sload(byt) }
     }
 
-    function mem(bytes32 byt, bytes32 val) external onlyOwner {
+    function mem (bytes32 byt, bytes32 val) external onlyOwner {
         assembly { sstore(byt, val) }
     }
 
